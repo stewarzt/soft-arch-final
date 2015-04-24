@@ -179,6 +179,7 @@ public class ConnectionHandler implements Runnable {
 					response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
 				}
 			}
+			//Creates new file, overwriting.
 			else if(request.getMethod().equalsIgnoreCase(Protocol.POST)) {
 				File f = new File(request.getHeader().get("file-name"));
 				FileWriter fw = new FileWriter(f, false);
@@ -186,7 +187,9 @@ public class ConnectionHandler implements Runnable {
 				fw.close();
 				
 				//Do Response
+				response = HttpResponseFactory.create201Created(Protocol.CLOSE, f.getPath());
 			}
+			//Appends to file, returns 201 created if succeeded.
 			else if(request.getMethod().equalsIgnoreCase(Protocol.PUT)) {
 				File f = new File(request.getHeader().get("file-name"));
 				FileWriter fw = new FileWriter(f, true);
@@ -194,11 +197,14 @@ public class ConnectionHandler implements Runnable {
 				fw.close();
 				
 				//Do Response
+				response = HttpResponseFactory.create201Created(Protocol.CLOSE, f.getPath());
 			}
+			//Handles Delete. Deletes if possible and returns 204 no content if successful.
 			else if(request.getMethod().equalsIgnoreCase(Protocol.DELETE)) {
 				File f = new File(request.getHeader().get("file-name"));
 				Files.deleteIfExists(f.toPath());
 				//Do Response
+				response = HttpResponseFactory.create204NoContent(Protocol.CLOSE);
 			}
 		}
 		catch(Exception e) {

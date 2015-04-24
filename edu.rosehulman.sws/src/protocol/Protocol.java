@@ -87,6 +87,10 @@ public class Protocol {
     public static final String OPEN = "Keep-Alive";
     public static final String DEFAULT_FILE = "index.html";
     public static final String MIME_TEXT = "text";
+	public static final String CREATED_TEXT = "CREATED";
+	public static final int CREATED_CODE = 201;
+	public static final String NOCONTENT_TEXT = "NO-CONTENT";
+	public static final int NOCONTENT_CODE = 204;
 	
 	
     
