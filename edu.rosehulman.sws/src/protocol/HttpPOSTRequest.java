@@ -59,10 +59,8 @@ public class HttpPOSTRequest extends HttpRequest {
 			e.printStackTrace();
 		}
 
-		/*returner = HttpResponseFactory.create201Created(Protocol.CLOSE,
-				f.getPath());*/
-		returner = HttpResponseFactory
-				.create404NotFound(Protocol.CLOSE);
+		returner = HttpResponseFactory.create201Created(Protocol.CLOSE,
+				f.getPath());
 
 		return returner;
 	}

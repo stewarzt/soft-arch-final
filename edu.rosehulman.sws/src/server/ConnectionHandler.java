@@ -120,7 +120,7 @@ public class ConnectionHandler implements Runnable {
 			// socket
 			try {
 				response.write(outStream);
-				// System.out.println(response);
+				System.out.println(response);
 			} catch (Exception e) {
 				// We will ignore this exception
 				e.printStackTrace();
