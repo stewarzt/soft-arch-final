@@ -172,15 +172,14 @@ public class HttpResponseFactory {
 
 	
 	//Returns a 201 created response
-	public static HttpResponse create201Created(String connection,
-			String filePath) {
+	public static HttpResponse create201Created(String connection, File file) {
+		
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.CREATED_CODE, Protocol.CREATED_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), file);
 
-		// Lets fill up header fields with more information
+		response.put("Location", file.getPath());
 		fillGeneralHeader(response, connection);
-		response.put("Location", filePath);
 		return response;
 	}
 
@@ -195,7 +194,6 @@ public class HttpResponseFactory {
 				Protocol.NOCONTENT_CODE, Protocol.NOCONTENT_TEXT,
 				new HashMap<String, String>(), null);
 
-		// Lets fill up header fields with more information
 		fillGeneralHeader(response, connection);
 		return response;
 	}

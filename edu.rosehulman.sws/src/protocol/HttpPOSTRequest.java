@@ -60,8 +60,7 @@ public class HttpPOSTRequest extends HttpRequest {
 		}
 
 		returner = HttpResponseFactory.create201Created(Protocol.CLOSE,
-				f.getPath());
-
+				f);
 		return returner;
 	}
 

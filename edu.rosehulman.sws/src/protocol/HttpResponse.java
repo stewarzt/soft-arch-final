@@ -158,6 +158,7 @@ public class HttpResponse implements IHttpResponse{
 		
 		// Flush the data so that outStream sends everything through the socket 
 		out.flush();
+		out.close();
 	}
 	
 	@Override

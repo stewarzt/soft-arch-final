@@ -47,6 +47,9 @@ public class Protocol {
     public static final int OK_CODE = 200;
     public static final String OK_TEXT = "OK";
     
+	public static final int CREATED_CODE = 201;
+	public static final String CREATED_TEXT = "CREATED";
+	
     public static final int MOVED_PERMANENTLY_CODE = 301;
     public static final String MOVED_PERMANENTLY_TEXT = "Moved Permanently";
     
@@ -87,8 +90,7 @@ public class Protocol {
     public static final String OPEN = "Keep-Alive";
     public static final String DEFAULT_FILE = "index.html";
     public static final String MIME_TEXT = "text";
-	public static final String CREATED_TEXT = "CREATED";
-	public static final int CREATED_CODE = 201;
+
 	public static final String NOCONTENT_TEXT = "NO-CONTENT";
 	public static final int NOCONTENT_CODE = 204;
 	
