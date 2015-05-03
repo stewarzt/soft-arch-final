@@ -21,21 +21,34 @@
 
 package server;
 
+import gui.WebServer;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.CharBuffer;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import protocol.HttpDELETERequest;
-import protocol.*;
+import javax.xml.ws.WebEndpoint;
 
+import protocol.HttpRequest;
+import protocol.HttpResponse;
+import protocol.HttpResponseFactory;
+import protocol.IHttpResponse;
+import protocol.Protocol;
+import protocol.ProtocolException;
+import protocol.Servlet;
 
 /**
  * This class is responsible for handling a incoming request by creating a
@@ -93,7 +106,6 @@ public class ConnectionHandler implements Runnable {
 
 		// At this point we have the input and output stream of the socket
 		// Now lets create a HttpRequest object
-		HttpRequest request = null;
 		IHttpResponse response = null;
 		try {
 			response = this.read(inStream);
@@ -213,7 +225,8 @@ public class ConnectionHandler implements Runnable {
 				value = value.trim();
 
 				// Now lets put the key=>value mapping to the header map
-				((Map<String, String>) reqClass.getField("header").get(request)).put(key, value);
+				((Map<String, String>) reqClass.getField("header").get(request))
+						.put(key, value);
 			}
 
 			// Processed one more line, now lets read another header line and
@@ -232,10 +245,32 @@ public class ConnectionHandler implements Runnable {
 		if (contentLength > 0) {
 			reqClass.getField("body").set(request, new char[contentLength]);
 
-			reader.read((char[])reqClass.getField("body").get(request));
+			reader.read((char[]) reqClass.getField("body").get(request));
 		}
-		//reqClass.getDeclaredMethod("toString").invoke(request);
-		return (IHttpResponse) reqClass.getDeclaredMethod("handle", Server.class).invoke(request,
-				server);
+
+		String[] uriValues = ((String) reqClass.getField("uri").get(request))
+				.split("/");
+
+		if (WebServer.config.containsKey(uriValues[1])) {
+			if (WebServer.config.get(uriValues[1]).containsKey(uriValues[2])) {
+				if (WebServer.config.get(uriValues[1]).get(uriValues[2])
+						.contains(method.toUpperCase())) {
+
+					ClassLoader servletLoader;
+					File servletFile = new File("plugins\\" + uriValues[1]
+							+ ".jar");
+
+					servletLoader = URLClassLoader
+							.newInstance(new URL[] { servletFile.toURL() });
+
+					Servlet servlet;
+					servlet = (Servlet) servletLoader.loadClass(uriValues[2])
+							.newInstance();
+
+					return servlet.handleRequest((HttpRequest) request);
+				}
+			}
+		}
+		return HttpResponseFactory.create400BadRequest(Protocol.CLOSE);
 	}
 }

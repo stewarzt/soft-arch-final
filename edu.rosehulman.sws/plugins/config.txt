@@ -1,0 +1,2 @@
+BasePlugin,GET,GetServlet
+BasePlugin,DELETE,GetServlet
