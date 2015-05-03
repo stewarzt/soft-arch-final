@@ -1,2 +1,8 @@
 BasePlugin,GET,GetServlet
-BasePlugin,DELETE,GetServlet
+BasePlugin,DELETE,DeleteServlet
+BasePlugin,PUT,PutServlet
+BasePlugin,POST,PostServlet
+BasePlugin2,GET,GetServlet
+BasePlugin2,DELETE,DeleteServlet
+BasePlugin2,PUT,PutServlet
+BasePlugin2,POST,PostServlet
