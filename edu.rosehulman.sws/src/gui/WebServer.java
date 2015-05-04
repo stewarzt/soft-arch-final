@@ -284,6 +284,19 @@ public class WebServer extends JFrame {
 	 */
 	public static void main(String args[]) {
 
+		readConfig();
+
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new WebServer().setVisible(true);
+			}
+		});
+	}
+
+	/**
+	 * 
+	 */
+	private static void readConfig() {
 		WebServer.config = new HashMap<String, HashMap<String, HashSet<String>>>();
 
 		File f = new File("plugins/config.txt");
@@ -309,11 +322,5 @@ public class WebServer extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new WebServer().setVisible(true);
-			}
-		});
 	}
 }
