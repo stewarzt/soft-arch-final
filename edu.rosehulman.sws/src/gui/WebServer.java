@@ -29,7 +29,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +51,8 @@ import server.Server;
 public class WebServer extends JFrame {
 	private static final long serialVersionUID = 5042579745743827174L;
 	public static HashMap<String, HashMap<String, HashSet<String>>> config;
+	public static ArrayList<InetAddress> blacklist = new ArrayList<InetAddress>();
+	public static ArrayList<InetAddress> whitelist = new ArrayList<InetAddress>();
 	
 	private JPanel panelRunServer;
 	private JLabel lblPortNumber;
@@ -309,6 +314,30 @@ public class WebServer extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		f = new File("blacklist.txt");
+		try {
+			List<String> lines = Files.readAllLines(f.toPath());
+			for (String l : lines) {
+				WebServer.blacklist.add(InetAddress.getByName(l));
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		f = new File("whitelist.txt");
+		try {
+			List<String> lines = Files.readAllLines(f.toPath());
+			for (String l : lines) {
+				WebServer.whitelist.add(InetAddress.getByName(l));
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {

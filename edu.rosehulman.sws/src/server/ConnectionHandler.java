@@ -251,6 +251,11 @@ public class ConnectionHandler implements Runnable {
 		String[] uriValues = ((String) reqClass.getField("uri").get(request))
 				.split("/");
 
+		if((method.equals("PUT") || method.equals("POST") || method.equals("DELETE")) && !WebServer.whitelist.contains(socket.getInetAddress()))
+		{
+			//Change to Not Auth
+			return HttpResponseFactory.create403Forbidden(Protocol.CLOSE);
+		}
 		if (WebServer.config.containsKey(uriValues[1])) {
 			if (WebServer.config.get(uriValues[1]).containsKey(uriValues[2])) {
 				if (WebServer.config.get(uriValues[1]).get(uriValues[2])

@@ -93,7 +93,8 @@ public class Protocol {
 
 	public static final String NOCONTENT_TEXT = "NO-CONTENT";
 	public static final int NOCONTENT_CODE = 204;
-	
+	public static final String FORBIDDEN_TEXT = "FORBIDDEN";
+	public static final int FORBIDDEN_CODE = 403;
 	
     
     /**
