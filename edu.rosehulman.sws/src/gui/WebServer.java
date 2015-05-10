@@ -249,6 +249,49 @@ public class WebServer extends JFrame {
 		});
 	}
 
+	private void resetServer()
+	{
+		if (server != null && !server.isStoped()) {
+			JOptionPane
+					.showMessageDialog(
+							WebServer.this,
+							"The web server is still running, try again later.",
+							"Server Still Running Error",
+							JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Read port number
+		int port = 80;
+		try {
+			port = Integer.parseInt(WebServer.this.txtPortNumber
+					.getText());
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(WebServer.this,
+					"Invalid Port Number!", "Web Server Input Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Get hold of the root directory
+		String rootDirectory = WebServer.this.txtRootDirectory
+				.getText();
+
+		// Now run the server in non-gui thread
+		server = new Server(rootDirectory, port, WebServer.this);
+		rateUpdater = new ServiceRateUpdater();
+
+		// Disable widgets
+		WebServer.this.disableWidgets();
+
+		// Now run the server in a separate thread
+		new Thread(server).start();
+
+		// Also run the service rate updater thread
+		new Thread(rateUpdater).start();
+	}
+
+	
 	private void disableWidgets() {
 		this.txtPortNumber.setEnabled(false);
 		this.butSelect.setEnabled(false);
@@ -263,24 +306,7 @@ public class WebServer extends JFrame {
 		this.butStopServer.setEnabled(false);
 	}
 
-	/**
-	 * For displaying exception.
-	 * 
-	 * @param e
-	 */
-	public void showSocketException(Exception e) {
-		JOptionPane.showMessageDialog(this, e.getMessage(),
-				"Web Server Socket Problem", JOptionPane.ERROR_MESSAGE);
-		if (this.server != null)
-			this.server.stop();
-		this.server = null;
-
-		if (this.rateUpdater != null)
-			this.rateUpdater.stop = true;
-		this.rateUpdater = null;
-		this.enableWidgets();
-	}
-
+	
 	/**
 	 * The application start point.
 	 * 
@@ -349,13 +375,5 @@ public class WebServer extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new WebServer().setVisible(true);
-			}
-		});
 	}
 }
