@@ -23,10 +23,13 @@ package server;
 
 import gui.WebServer;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * This represents a welcoming server for the incoming TCP request from a HTTP
@@ -39,6 +42,8 @@ public class Server implements Runnable {
 	private int port;
 	private boolean stop;
 	private ServerSocket welcomeSocket;
+	private long currentTime;
+	private HashMap<InetAddress, Integer> connectionsPerSecond;
 
 	private long connections;
 	private long serviceTime;
@@ -56,6 +61,8 @@ public class Server implements Runnable {
 		this.connections = 0;
 		this.serviceTime = 0;
 		this.window = window;
+		this.currentTime = System.currentTimeMillis() / 1000;
+		this.connectionsPerSecond = new HashMap<InetAddress, Integer>();
 	}
 
 	/**
@@ -123,11 +130,11 @@ public class Server implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		while (true) {
-			try {
-				// Now keep welcoming new connections until stop flag is set to
-				// true
 
+		try {
+			// Now keep welcoming new connections until stop flag is set to
+			// true
+			while (true) {
 				// Listen for incoming socket connection
 				// This method block until somebody makes a request
 				Socket connectionSocket = this.welcomeSocket.accept();
@@ -135,20 +142,49 @@ public class Server implements Runnable {
 				if (this.stop)
 					break;
 
+				// Logic for adding to blacklist
+
 				// Create a handler for this incoming connection and start the
 				// handler in a new thread
-				if (!WebServer.blacklist.contains(connectionSocket.getInetAddress()))
-				{
+				if (!WebServer.blacklist.contains(connectionSocket
+						.getInetAddress())) {
+					if (this.currentTime != System.currentTimeMillis() / 1000) {
+						this.currentTime = System.currentTimeMillis() / 1000;
+						this.connectionsPerSecond.clear();
+					}
+					this.connectionsPerSecond.put(connectionSocket
+							.getInetAddress(),
+							(this.connectionsPerSecond.getOrDefault(
+									connectionSocket.getInetAddress(), 0) + 1));
+					if(this.connectionsPerSecond.get(connectionSocket.getInetAddress()) >= 50)
+					{
+						WebServer.blacklist.add(connectionSocket.getInetAddress());
+						File f = new File("blacklist.txt");
+
+						try {
+							FileWriter fw = new FileWriter(f, false);
+							fw.write(connectionSocket.getInetAddress().toString() + "\r\n");
+							fw.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+					}
+					
 					ConnectionHandler handler = new ConnectionHandler(this,
 							connectionSocket);
 					new Thread(handler).start();
 				}
 				this.welcomeSocket.close();
 			}
+		}
 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		catch (Exception e) {
+			e.printStackTrace();
+			Server server = new Server(rootDirectory, port, window);
+			new Thread(server).start();
 		}
 	}
 
