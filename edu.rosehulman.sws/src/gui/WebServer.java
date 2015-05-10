@@ -349,13 +349,5 @@ public class WebServer extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new WebServer().setVisible(true);
-			}
-		});
 	}
 }

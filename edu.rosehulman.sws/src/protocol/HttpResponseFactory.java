@@ -209,4 +209,18 @@ public class HttpResponseFactory {
 		fillGeneralHeader(response, connection);
 		return response;
 	}
+
+	/**
+	 * @param close
+	 */
+	public static HttpResponse create408RequestTimeout(String connection) {
+		HttpResponse response = new HttpResponse(Protocol.VERSION,
+				Protocol.TIMEOUT_CODE, Protocol.TIMEOUT_TEXT,
+				new HashMap<String, String>(), null);
+
+		// Lets fill up header fields with more information
+		fillGeneralHeader(response, connection);
+
+		return response;
+	}
 }

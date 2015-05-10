@@ -95,7 +95,8 @@ public class Protocol {
 	public static final int NOCONTENT_CODE = 204;
 	public static final String FORBIDDEN_TEXT = "FORBIDDEN";
 	public static final int FORBIDDEN_CODE = 403;
-	
+	public static final int TIMEOUT_CODE = 408;
+	public static final String TIMEOUT_TEXT = "REQUEST-TIMEOUT";
     
     /**
      * Returns a formatted String containing server information.<br/>
