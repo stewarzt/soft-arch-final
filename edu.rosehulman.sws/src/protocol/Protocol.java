@@ -42,6 +42,7 @@ public class Protocol {
     public static final String POST = "POST";
     public static final String PUT = "PUT";
     public static final String DELETE = "DELETE";
+    public static final String COPY = "COPY";
     
     // Some useful http codes and text
     public static final int OK_CODE = 200;

@@ -38,7 +38,7 @@ import server.Server;
  * 
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
-public class HttpDELETERequest extends HttpRequest {
+public class HttpCOPYRequest extends HttpRequest {
 
 	/*
 	 * (non-Javadoc)
@@ -47,8 +47,18 @@ public class HttpDELETERequest extends HttpRequest {
 	 */
 	@Override
 	public IHttpResponse handle(Server s) {
-
-		return HttpResponseFactory.create204NoContent(Protocol.CLOSE);
+		IHttpResponse returner;
+		File f = new File(this.getHeader().get("file-name"));
+		try {
+			Files.deleteIfExists(f.toPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Do Response
+		returner = HttpResponseFactory
+				.create204NoContent(Protocol.CLOSE);
+		return returner;
 	}
 
 }

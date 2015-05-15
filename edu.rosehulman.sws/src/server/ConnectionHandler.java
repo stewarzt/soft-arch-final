@@ -125,7 +125,9 @@ public class ConnectionHandler implements Runnable {
 
 		        try {
 		            System.out.println("Started..");
-		            System.out.println(future.get(3, TimeUnit.SECONDS));
+		            
+		            response = future.get(3, TimeUnit.SECONDS);
+		            System.out.println(response);
 		            System.out.println("Finished!");
 		        } catch (TimeoutException e) {
 		            System.out.println("Terminated!");

@@ -103,6 +103,23 @@ public class HttpResponseFactory {
 
 		return response;
 	}
+	
+	public static HttpResponse create200OK(String body, String connection) {
+		HttpResponse response = new HttpResponse(Protocol.VERSION,
+				Protocol.OK_CODE, Protocol.OK_TEXT,
+				new HashMap<String, String>(), body);
+
+		// Lets fill up header fields with more information
+		fillGeneralHeader(response, connection);
+
+		// Lets add last modified date for the file
+		
+		// Lets get content length in bytes
+		long length = body.length();
+		response.put(Protocol.CONTENT_LENGTH, length + "");
+
+		return response;
+	}
 
 	/**
 	 * Creates a {@link HttpResponse} object for sending bad request response.
@@ -115,7 +132,7 @@ public class HttpResponseFactory {
 	public static HttpResponse create400BadRequest(String connection) {
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.BAD_REQUEST_CODE, Protocol.BAD_REQUEST_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), (File)null);
 
 		// Lets fill up header fields with more information
 		fillGeneralHeader(response, connection);
@@ -127,7 +144,7 @@ public class HttpResponseFactory {
 	public static HttpResponse create403Forbidden(String connection) {
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.FORBIDDEN_CODE, Protocol.FORBIDDEN_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), (File)null);
 
 		// Lets fill up header fields with more information
 		fillGeneralHeader(response, connection);
@@ -146,7 +163,7 @@ public class HttpResponseFactory {
 	public static HttpResponse create404NotFound(String connection) {
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.NOT_FOUND_CODE, Protocol.NOT_FOUND_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), (File)null);
 
 		// Lets fill up the header fields with more information
 		fillGeneralHeader(response, connection);
@@ -204,7 +221,7 @@ public class HttpResponseFactory {
 		
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.NOCONTENT_CODE, Protocol.NOCONTENT_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), (File)null);
 
 		fillGeneralHeader(response, connection);
 		return response;
@@ -216,7 +233,7 @@ public class HttpResponseFactory {
 	public static HttpResponse create408RequestTimeout(String connection) {
 		HttpResponse response = new HttpResponse(Protocol.VERSION,
 				Protocol.TIMEOUT_CODE, Protocol.TIMEOUT_TEXT,
-				new HashMap<String, String>(), null);
+				new HashMap<String, String>(), (File)null);
 
 		// Lets fill up header fields with more information
 		fillGeneralHeader(response, connection);

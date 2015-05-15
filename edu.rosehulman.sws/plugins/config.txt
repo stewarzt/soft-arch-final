@@ -6,3 +6,8 @@ BasePlugin2,GET,GetServlet
 BasePlugin2,DELETE,DeleteServlet
 BasePlugin2,PUT,PutServlet
 BasePlugin2,POST,PostServlet
+ApplicationPlugin,GET,GetServlet
+ApplicationPlugin,COPY,AppendServlet
+ApplicationPlugin,DELETE,DeleteServlet
+ApplicationPlugin,PUT,PutServlet
+ApplicationPlugin,POST,PostServlet
