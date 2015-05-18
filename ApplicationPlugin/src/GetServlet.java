@@ -52,10 +52,10 @@ public class GetServlet implements Servlet {
 			if (fList[x].isFile()) {
 				if (x != fList.length - 1) {
 					s.append("{\"id\": " + id + ", \"path\" : \""
-							+ fList[x].getAbsolutePath() + "\"},");
+							+ fList[x].getAbsolutePath().replace('\\', '/') + "\"},");
 				} else {
 					s.append("{\"id\": " + id + ", \"path\" : \""
-							+ fList[x].getAbsolutePath() + "\"},");
+							+ fList[x].getAbsolutePath().replace('\\', '/') + "\"},");
 				}
 				id++;
 			}
